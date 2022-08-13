@@ -5,11 +5,13 @@ ScriptsOnlyBuild:
     - BallCatcher
     - BallMovement
     - ButtonManager
+    - CoinMove
     - GameEventsHandler
     - HarmObstacle
     - Hoop
     - LimitedBouncePlatform
     - MovingPlatform
+    - PointerClickThrough
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
@@ -18,8 +20,6 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
-    - UnityEditor.Tilemaps.GridPaletteBrushes
-    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
@@ -98,29 +98,33 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4008}
     - Class: 114
-      Script: {instanceID: 4442}
+      Script: {instanceID: 4082}
     - Class: 114
-      Script: {instanceID: 4750}
+      Script: {instanceID: 4444}
     - Class: 114
-      Script: {instanceID: 5572}
+      Script: {instanceID: 4754}
     - Class: 114
-      Script: {instanceID: 5612}
+      Script: {instanceID: 5576}
     - Class: 114
-      Script: {instanceID: 5880}
+      Script: {instanceID: 5616}
     - Class: 114
-      Script: {instanceID: 6228}
+      Script: {instanceID: 5884}
     - Class: 114
-      Script: {instanceID: 6348}
+      Script: {instanceID: 6232}
     - Class: 114
-      Script: {instanceID: 6418}
+      Script: {instanceID: 6352}
     - Class: 114
-      Script: {instanceID: 6788}
+      Script: {instanceID: 6422}
     - Class: 114
-      Script: {instanceID: 7196}
+      Script: {instanceID: 6792}
     - Class: 114
-      Script: {instanceID: 7444}
+      Script: {instanceID: 7200}
     - Class: 114
-      Script: {instanceID: 8890}
+      Script: {instanceID: 7448}
+    - Class: 114
+      Script: {instanceID: 7732}
+    - Class: 114
+      Script: {instanceID: 8896}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -138,6 +142,8 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 249
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -514,7 +520,7 @@ ScriptsOnlyBuild:
     className: ScriptGraphAsset
   - hash:
       serializedVersion: 2
-      Hash: b984253a7a5e267868bed4a8c16880b6
+      Hash: 936260f9c2367709dc72d03b6df06d74
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameEventsHandler
@@ -536,6 +542,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnPointerExitMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CoinMove
   - hash:
       serializedVersion: 2
       Hash: aba7b2852ef61d175dd9602e7723d5e5
@@ -614,6 +626,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SubMeshUI
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Magnet
   - hash:
       serializedVersion: 2
       Hash: fd68d84f33fad85aac38f2739c0ee270
@@ -886,7 +904,7 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
-      Hash: 502a4a73e1d98afaa2d2f3af5a76bb52
+      Hash: 2348ab2ad0f19ae625863bead4cebf81
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: AbilityBall
@@ -986,6 +1004,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Dropdown
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PointerClickThrough
   - hash:
       serializedVersion: 2
       Hash: 0edeba255bdbade25edc357f1412ba38
@@ -1124,13 +1148,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSliderValueChangedMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: PointerClickThrough
   platform: 13
   scenePathNames:
   - Assets/Scenes/Level1.unity
-  playerPath: D:/GitHub/Basketball-2D/BasketBall2D/Builds/Basketball.apk
+  playerPath: D:/GitHub/2d-basketball-game/BasketBall2D/Builds/Basketball.apk

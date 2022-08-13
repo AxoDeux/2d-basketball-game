@@ -107,7 +107,7 @@
 -define:PACKAGE_UITOOLKIT
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
--r:"D:/GitHub/Basketball-2D/BasketBall2D/Library/PackageCache/com.unity.visualscripting@1.6.1/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"D:/GitHub/2d-basketball-game/BasketBall2D/Library/PackageCache/com.unity.visualscripting@1.6.1/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
 -r:"D:/Unity/2021.1.24f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/mscorlib.dll"
 -r:"D:/Unity/2021.1.24f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.ComponentModel.Composition.dll"
 -r:"D:/Unity/2021.1.24f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Core.dll"
