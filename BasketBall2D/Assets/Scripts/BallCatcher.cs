@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BallCatcher : MonoBehaviour, IDragHandler, IDropHandler {
+public class BallCatcher : MonoBehaviour, IDragHandler{
 
     private const float CATCH_TIME = 0.75f;
     [SerializeField]
