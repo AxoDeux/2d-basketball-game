@@ -50,7 +50,6 @@ public class BallCatcher : MonoBehaviour, IDragHandler, IDropHandler {
         SetBallPosition(collision.gameObject);
         if(ball) {
             ball.LastStationaryBallPos = transform.position;
-            Debug.Log("last position set");
         }
     }
 
@@ -72,7 +71,6 @@ public class BallCatcher : MonoBehaviour, IDragHandler, IDropHandler {
                 //Check if works on phone or use ScreenToWorldPoint
                 Vector2 touchDelta = (mainCam.ScreenToWorldPoint(Input.GetTouch(0).position) - lastMousePos) / canvas.scaleFactor;
                 transform.localPosition += new Vector3(touchDelta.x, touchDelta.y, 0);
-                Debug.Log(touchDelta);
             }
 
             lastMousePos = mainCam.ScreenToWorldPoint(Input.GetTouch(0).position);
@@ -83,15 +81,10 @@ public class BallCatcher : MonoBehaviour, IDragHandler, IDropHandler {
             if(lastMousePos != Vector3.zero) {
                 Vector2 touchDelta = (mainCam.ScreenToWorldPoint(Input.mousePosition) - lastMousePos) / canvas.scaleFactor;
                 transform.localPosition += new Vector3(touchDelta.x, touchDelta.y, 0);
-                Debug.Log(touchDelta);
             }
 
             lastMousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
         }
-    }
-
-    public void OnDrop(PointerEventData eventData) {
-        Debug.Log("Dropped");
     }
 
     private void UnlockPositions(bool status) {

@@ -26,13 +26,14 @@ public class BallMovement : MonoBehaviour {
     private Vector2 arrowDirection;
 
     private int spawnPosNum;
-    private bool isLeft;
 
     private Rigidbody2D rb;
     private Camera mainCam;
     private AbilityBall ability;
 
     private bool isClickOnUI = false;
+    private bool isShot = false;                //Check is ball in air
+    private bool checkingStuck = false;
 
     private void Awake()
     {
@@ -46,15 +47,22 @@ public class BallMovement : MonoBehaviour {
         rb.isKinematic = true;
 
         spawnPosNum = 0;
-        transform.position = spawnPoints[0].position;
-        isLeft = true;
+        transform.position = spawnPoints[spawnPosNum].position;
 
         LastStationaryBallPos = transform.position;
     }
 
     private void Update()
     {
-        if(rb.velocity.magnitude != 0) { return; }      //So player doesnt control ball when its in air
+        float velMagnitude = rb.velocity.magnitude;
+        
+        if(velMagnitude <= 1f && isShot && !checkingStuck) {   //check if slow and already shot. (to remove stuck balls)
+            StartCoroutine(DelayStuckCheck());
+            return;
+        }
+
+        if(velMagnitude != 0) { return; }      //So player doesnt control ball when its in air
+
 
         #region touchinput
         if(Input.touchCount == 1) {
@@ -83,6 +91,7 @@ public class BallMovement : MonoBehaviour {
                 rb.AddForce(-direction * force);
 
                 initialPos = Vector2.zero;
+                isShot = true;
             }
 
             if(Input.GetTouch(0).phase == TouchPhase.Moved && initialPos != Vector2.zero) {
@@ -138,7 +147,7 @@ public class BallMovement : MonoBehaviour {
             rb.AddForce(-direction * force);
 
             initialPos = Vector2.zero;
-
+            isShot = true;
         }
 
         if (Input.GetMouseButton(0) && initialPos != Vector2.zero)
@@ -213,6 +222,8 @@ public class BallMovement : MonoBehaviour {
         rb.angularVelocity = 0f;
         gameObject.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
         arrowPivot.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+        isShot = false;
     }
 
     public void PlayerDied() {
@@ -229,8 +240,20 @@ public class BallMovement : MonoBehaviour {
             transform.position = LastStationaryBallPos;
         }
 
+        isShot = false;
+
         PlayerDiedEvent.Invoke();
     }
 
+    private IEnumerator DelayStuckCheck() {
+        checkingStuck = true;
+
+        yield return new WaitForSeconds(3f);
+
+        if(rb.velocity.magnitude <= 0.4 && isShot) {
+            PlayerDied();
+        }
+        checkingStuck = false;
+    }
 
 }
