@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class LevelsButtonManager : MonoBehaviour
 {
+    private void Awake() {
+        Screen.orientation = ScreenOrientation.Landscape;
+    }
+
     public void Back() {
         SceneManager.LoadScene(0);
     }

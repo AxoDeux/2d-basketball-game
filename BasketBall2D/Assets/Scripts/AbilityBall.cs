@@ -20,13 +20,6 @@ public class AbilityBall : MonoBehaviour
         ballMovement = GetComponent<BallMovement>();
     }
 
-    private void OnEnable() {
-        ballMovement.PlayerDiedEvent += HandlePlayerDeath;
-    }
-
-    private void OnDisable() {
-        ballMovement.PlayerDiedEvent -= HandlePlayerDeath;
-    }
 
     //Linear movement ball
     public void OnLinearMove() {
@@ -62,11 +55,4 @@ public class AbilityBall : MonoBehaviour
         isMagnetActive = false;
     }
 
-    private void HandlePlayerDeath() {
-        if(isSecondLife) {
-            transform.position = ballMovement.LastStationaryBallPos;
-            isSecondLife = false;
-            Debug.Log("Second life lost");
-        }
-    }
 }

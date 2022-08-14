@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MainButtonsManager : MonoBehaviour
 {
+    private void Awake() {
+        Screen.orientation = ScreenOrientation.Landscape;
+    }
+
     public void Play() {
         SceneManager.LoadScene(1);
     }

@@ -14,7 +14,7 @@ public class BallMovement : MonoBehaviour {
     [SerializeField] private AudioSource bounceAudio = null;
 
     public delegate void PlayerDiedEventHandler();
-    public event PlayerDiedEventHandler PlayerDiedEvent;
+    public static event PlayerDiedEventHandler PlayerDiedEvent;
 
     public Vector3 LastStationaryBallPos;
 
@@ -234,15 +234,18 @@ public class BallMovement : MonoBehaviour {
         gameObject.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
         arrowPivot.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-        //player has actually died
-        if(!ability.isSecondLife) {
+        //player has a second life or has actually died 
+        if(ability.isSecondLife) {
+            transform.position = LastStationaryBallPos;
+            ability.isSecondLife = false;
+            Debug.Log("Restarted from checkpoint");
+        } else {
             LastStationaryBallPos = spawnPoints[0].position;
             transform.position = LastStationaryBallPos;
+            PlayerDiedEvent.Invoke();
         }
 
         isShot = false;
-
-        PlayerDiedEvent.Invoke();
     }
 
     private IEnumerator DelayStuckCheck() {
@@ -255,5 +258,4 @@ public class BallMovement : MonoBehaviour {
         }
         checkingStuck = false;
     }
-
 }
