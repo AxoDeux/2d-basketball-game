@@ -9,17 +9,16 @@ public class ButtonManager : MonoBehaviour
 {
     [SerializeField] private Transform hoopObject = null;
     [SerializeField] private GameObject ballCatcherPrefab = null;
+    [SerializeField] private GameObject optionsPanel = null;
 
     private const float UNLOCK_TIME = 15f;
     public delegate void UnlockCatcherEventHandler(bool unlockStatus);
     public event UnlockCatcherEventHandler UnlockCatcherEvent;
     private bool isLocked = true;
 
-    private void Awake()
-    {
+    private void Awake(){
         Screen.orientation = ScreenOrientation.Landscape;
     }
-
 
     public void SpawnCatcher() {
         Vector2 screenPosInWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width/2, Screen.height/2));
@@ -27,9 +26,18 @@ public class ButtonManager : MonoBehaviour
         Instantiate(ballCatcherPrefab, screenPosInWorld, Quaternion.identity, null);
     }
 
-    public void OnPressQuit()
-    {
+    public void OnPressQuit() {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
+    }
+
+    public void OnOptions() {
+        optionsPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void OnResume() {
+        optionsPanel.SetActive(false);
+        Time.timeScale = 1;
     }
 
     public void OnUnlockCatcher(Button button) {
