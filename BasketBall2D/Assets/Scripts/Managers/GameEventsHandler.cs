@@ -45,6 +45,13 @@ public class GameEventsHandler : MonoBehaviour
         RandomForceField
     };
 
+    private void OnEnable() {
+        ButtonManager.RetryEvent += Reset;
+    }
+    private void OnDisable() {
+        ButtonManager.RetryEvent -= Reset;
+    }
+
     private void Update() {
         float delta = Time.deltaTime;
         if(time > 0) {
@@ -55,8 +62,7 @@ public class GameEventsHandler : MonoBehaviour
             }
         }
 
-        if(isCountDown) {
-            
+        if(isCountDown) {            
             countDown -= delta;
             int num = (int)countDown;
             if(num < 0) {
@@ -71,14 +77,11 @@ public class GameEventsHandler : MonoBehaviour
 
     public void InvertGravity() {
         isGravityEvent = true;
-
-
         StartCoroutine(CountdownToEvent(Events.InverseGravity));        
     }
 
     public void ActivateForceField() {
-        StartCoroutine(CountdownToEvent(Events.RandomForceField));
-        
+        StartCoroutine(CountdownToEvent(Events.RandomForceField));        
     }
     private IEnumerator CountdownToEvent(Events eventName) {
         countDown = COUNTDOWN;
@@ -126,8 +129,6 @@ public class GameEventsHandler : MonoBehaviour
 
     }
 
-
-
     private void StartIndicator(float duration) {
         timeIndicator.fillAmount = 1;
         timeIndicator.gameObject.SetActive(true);
@@ -135,6 +136,22 @@ public class GameEventsHandler : MonoBehaviour
         eventDuration = duration;
     }
 
+    private void Reset() {
+        StopAllCoroutines();
 
+        time = -1;
+        isCountDown = false;
+        eventDuration = 0;
+        countDown = 0;
+        eventNotice.gameObject.SetActive(false);
+        timeIndicator.gameObject.SetActive(false);
+
+        isGravityEvent = false;
+        ball.GetComponent<Rigidbody2D>().gravityScale = 2;
+        topWall.tag = WALL_TAG;
+        floor.tag = FLOOR_TAG;
+        forceField.SetActive(false);
+
+    }
 }
 

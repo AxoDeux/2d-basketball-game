@@ -10,6 +10,9 @@ public class CoinMove : MonoBehaviour
     private bool isCaughtInMagnet = false;
     private GameObject ball = null;
 
+    public delegate void StoreCoinEventHandler(GameObject coin, Vector2 pos);
+    public static StoreCoinEventHandler StoreCoinEvent;
+
     public delegate void OnCoinCollectedEventHandler();
     public static OnCoinCollectedEventHandler OnCoinCollectedEvent;
 
@@ -19,6 +22,10 @@ public class CoinMove : MonoBehaviour
         ball = GameObject.FindGameObjectWithTag("Player");
 
         layerMask = LayerMask.NameToLayer("PlayerLayer");
+    }
+
+    private void Start() {
+        StoreCoinEvent.Invoke(gameObject, transform.position);
     }
 
     void Update()
@@ -32,13 +39,17 @@ public class CoinMove : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Magnet")) {
             isCaughtInMagnet = true;
-            Debug.Log("Caught in magnet");
         }
 
         if(collision.CompareTag("Player")) {
-            Debug.Log("Coin Enterred collider, trigger");
+            isCaughtInMagnet = false;
             OnCoinCollectedEvent.Invoke();
-            Destroy(gameObject, 0.05f);
+            StartCoroutine(CoinCollectionDelay());
         }
+    }
+
+    private IEnumerator CoinCollectionDelay() {
+        yield return new WaitForSeconds(0.05f);
+        gameObject.SetActive(false);
     }
 }

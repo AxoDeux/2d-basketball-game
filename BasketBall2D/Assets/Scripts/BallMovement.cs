@@ -12,7 +12,7 @@ public class BallMovement : MonoBehaviour {
     [SerializeField] private Hoop hoopScript = null;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private AudioSource bounceAudio = null;
-
+    
     public delegate void PlayerDiedEventHandler();
     public static event PlayerDiedEventHandler PlayerDiedEvent;
 
@@ -34,16 +34,15 @@ public class BallMovement : MonoBehaviour {
     private bool isClickOnUI = false;
     private bool isShot = false;                //Check is ball in air
     private bool checkingStuck = false;
+    private bool canMove = true;
 
-    private void Awake()
-    {
+    private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
         ability = GetComponent<AbilityBall>();
     }
 
-    private void Start()
-    {
+    private void Start() {
         rb.isKinematic = true;
 
         spawnPosNum = 0;
@@ -52,8 +51,15 @@ public class BallMovement : MonoBehaviour {
         LastStationaryBallPos = transform.position;
     }
 
-    private void Update()
-    {
+    private void OnEnable() {
+        ButtonManager.UnlockCatcherEvent += CanMove;
+    }
+
+    private void OnDisable() {
+        ButtonManager.UnlockCatcherEvent -= CanMove;
+    }
+
+    private void Update() {
         float velMagnitude = rb.velocity.magnitude;
         
         if(velMagnitude <= 1f && isShot && !checkingStuck) {   //check if slow and already shot. (to remove stuck balls)
@@ -63,7 +69,7 @@ public class BallMovement : MonoBehaviour {
 
         if(velMagnitude != 0) { return; }      //So player doesnt control ball when its in air
 
-
+        if(!canMove) return;
         #region touchinput
         if(Input.touchCount == 1) {
 
@@ -120,8 +126,7 @@ public class BallMovement : MonoBehaviour {
         #endregion
 
         #region Mouse Inputs
-        if (Input.GetMouseButtonDown(0) && !IsPointerOverUIWithIgnores(Input.mousePosition))
-        {
+        if (Input.GetMouseButtonDown(0) && !IsPointerOverUIWithIgnores(Input.mousePosition)) {
             initialPos = Input.mousePosition;
             //originPos = arrowPivot.position;
             originPos = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -187,8 +192,7 @@ public class BallMovement : MonoBehaviour {
         return raycastResults.Count > 0;
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
+    private void OnCollisionEnter2D(Collision2D other) {
         string otherTag = other.gameObject.tag;
         if (otherTag == "Floor")
         {
@@ -196,13 +200,6 @@ public class BallMovement : MonoBehaviour {
                 //Set Spawn Point
                 transform.position = spawnPoints[0].position;
             }            
-
-            //if player has not scored then score resets
-            if (!hoopScript.hasScored){
-                hoopScript.SetScore();
-            }
-
-            hoopScript.hasScored = false;
 
             bounceAudio.Play();
 
@@ -257,5 +254,9 @@ public class BallMovement : MonoBehaviour {
             PlayerDied();
         }
         checkingStuck = false;
+    }
+
+    private void CanMove(bool status) {
+        canMove = !status;
     }
 }

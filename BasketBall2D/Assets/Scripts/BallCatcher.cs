@@ -31,11 +31,16 @@ public class BallCatcher : MonoBehaviour, IDragHandler{
         }
 
         buttonManager = FindObjectOfType<ButtonManager>();
+        UnlockPositions(!buttonManager.isLocked);
         mainCam = Camera.main;
     }
 
     private void OnEnable() {
-        buttonManager.UnlockCatcherEvent += UnlockPositions;
+        ButtonManager.UnlockCatcherEvent += UnlockPositions;
+    }
+
+    private void OnDisable() {
+        ButtonManager.UnlockCatcherEvent -= UnlockPositions;
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
