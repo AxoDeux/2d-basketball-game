@@ -30,6 +30,9 @@ public class GameEventsHandler : MonoBehaviour
     [SerializeField]
     private TMP_Text eventNotice = null;
 
+    [SerializeField]
+    private List<ParticleSystemForceField> forceFields = new List<ParticleSystemForceField>();
+
     public delegate bool InverseGravityHandler(bool isGravityEvent);
     public static event InverseGravityHandler inverseGravityEvent;
     public static bool isGravityEvent = false;
@@ -95,6 +98,7 @@ public class GameEventsHandler : MonoBehaviour
                 ball.GetComponent<Rigidbody2D>().gravityScale = -2;
                 topWall.tag = FLOOR_TAG;
                 floor.tag = WALL_TAG;
+                SetForceField(new Vector2(0, 1));
 
                 StartIndicator(EVENT_DURATION);
                 StartCoroutine(EventDurationDelay(Events.InverseGravity));
@@ -102,7 +106,10 @@ public class GameEventsHandler : MonoBehaviour
 
             case Events.RandomForceField:
                 forceField.SetActive(true);
-                forceField.GetComponent<AreaEffector2D>().forceAngle = Random.Range(0, 359);
+                int angle = Random.Range(0, 359);
+                forceField.GetComponent<AreaEffector2D>().forceAngle = angle;
+                Vector2 direction = new Vector2((float)Mathf.Cos(angle), (float)Mathf.Sin(angle));
+                SetForceField(direction);
 
                 StartIndicator(EVENT_DURATION);
                 StartCoroutine(EventDurationDelay(Events.RandomForceField));
@@ -119,11 +126,12 @@ public class GameEventsHandler : MonoBehaviour
                 topWall.tag = WALL_TAG;
                 floor.tag = FLOOR_TAG;
                 isGravityEvent = false;
-                //inverseGravityEvent.Invoke(isGravityEvent);
+                SetForceField(new Vector2(0, -1));
                 break;
 
             case Events.RandomForceField:
                 forceField.SetActive(false);
+                SetForceField(new Vector2(0, 0));
                 break;
         }
 
@@ -152,6 +160,13 @@ public class GameEventsHandler : MonoBehaviour
         floor.tag = FLOOR_TAG;
         forceField.SetActive(false);
 
+    }
+    private void SetForceField(Vector2 direction) {
+        foreach(ParticleSystemForceField forceField in forceFields) {
+            direction = direction * 40;
+            forceField.directionX = direction.x;
+            forceField.directionX = direction.y;
+        }        
     }
 }
 
