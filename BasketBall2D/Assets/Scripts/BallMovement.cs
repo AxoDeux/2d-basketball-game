@@ -256,7 +256,11 @@ public class BallMovement : MonoBehaviour {
         checkingStuck = false;
     }
 
-    private void CanMove(bool status) {
+    private void CanMove(bool status) {         //when catcher is unlocked
         canMove = !status;
+    }
+
+    public void CanBallMove(bool status) {
+        canMove = status;
     }
 }

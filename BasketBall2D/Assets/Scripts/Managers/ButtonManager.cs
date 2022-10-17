@@ -20,7 +20,7 @@ public class ButtonManager : MonoBehaviour
     public static event UnlockCatcherEventHandler UnlockCatcherEvent;
     public bool isLocked = true;
 
-    public delegate void CatcherSpawnedEventHandler();
+    public delegate void CatcherSpawnedEventHandler(GameObject catcher);
     public static event CatcherSpawnedEventHandler CatcherSpawnedEvent;
     List<GameObject> newCatchers;
 
@@ -117,9 +117,9 @@ public class ButtonManager : MonoBehaviour
     public void SpawnCatcher() {
         Vector2 screenPosInWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width / 2, Screen.height / 2));
         Debug.Log(screenPosInWorld);
-        Instantiate(ballCatcherPrefab, screenPosInWorld, Quaternion.identity, null);
+        GameObject obj = Instantiate(ballCatcherPrefab, screenPosInWorld, Quaternion.identity, null);
 
-        CatcherSpawnedEvent.Invoke();
+        CatcherSpawnedEvent.Invoke(obj);
     }
 
     public void OnUnlockCatcher(Button button) {

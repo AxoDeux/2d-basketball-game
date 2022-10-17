@@ -16,6 +16,8 @@ public class ScoreSystem : MonoBehaviour
     private int catcherAdded = 0;
     public int CatcherAdded { get { return CatcherAdded; } }
 
+    [SerializeField]
+    private TMP_Text resultText = null;
 
     [SerializeField]
     private TMP_Text timeText = null;
@@ -46,6 +48,9 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField]
     private GameObject scoreCard = null;
 
+    [SerializeField]
+    private BallMovement ballScript = null;
+
     private string timeString = string.Empty;
     string minutes = string.Empty;
     string seconds = string.Empty;
@@ -56,11 +61,15 @@ public class ScoreSystem : MonoBehaviour
     private int loadedTime = 0;
 
     Dictionary<GameObject, Vector2> coinsMap;
+    Dictionary<GameObject, Vector2> weakPlatformMap;
+    List<GameObject> catcherList;
 
     private void Awake() {
         SaveSystem.Init();
         currTimeRemaining = timeLimit;
         coinsMap = new Dictionary<GameObject, Vector2>();
+        weakPlatformMap = new Dictionary<GameObject, Vector2>();
+        catcherList = new List<GameObject>();
     }
 
     private void OnEnable() {
@@ -69,6 +78,7 @@ public class ScoreSystem : MonoBehaviour
         CoinMove.StoreCoinEvent += FillCoinMap;
         ButtonManager.CatcherSpawnedEvent += HandleCatcherSpawned;
         ButtonManager.UnlockCatcherEvent += SetPauseBool;
+        LimitedBouncePlatform.WeakPlatformSpawnedEvent += HandleWeakPlatformSpawned;
         ButtonManager.RetryEvent += Reset;
         Hoop.ScoredEvent += HasScored;
     }
@@ -94,7 +104,7 @@ public class ScoreSystem : MonoBehaviour
         timeText.text = timeString;
 
         if(currTimeRemaining <= 0) {
-            Debug.Log("Time up!!!");
+            GameOver();
         }
     }
 
@@ -115,6 +125,7 @@ public class ScoreSystem : MonoBehaviour
     private void HandlePlayerDeath() {
         lives--;
         livesText.text = lives.ToString();
+        if(lives == 0) GameOver();
     }
 
     private void FillCoinMap(GameObject coin, Vector2 pos) {
@@ -126,8 +137,13 @@ public class ScoreSystem : MonoBehaviour
         coinsText.text = coins.ToString();
     }
 
-    private void HandleCatcherSpawned() {
+    private void HandleCatcherSpawned(GameObject catcher) {
         catcherAdded++;
+        catcherList.Add(catcher);
+    }
+
+    private void HandleWeakPlatformSpawned(GameObject platform, Vector2 pos) {
+        weakPlatformMap.Add(platform, pos);
     }
 
     private void SetPauseBool(bool status) {
@@ -162,9 +178,11 @@ public class ScoreSystem : MonoBehaviour
             CheckTimeSize(loadedTime);
             timeStr = $"{minutes} : {seconds}";
             minTimeScoreText.text = timeStr;
-        }        
-
+        }
+        resultText.text = "Completed!";
         scoreCard.SetActive(true);
+
+        ballScript.CanBallMove(false);
     }
 
 
@@ -183,6 +201,33 @@ public class ScoreSystem : MonoBehaviour
         score = lscore + cscore + catscore;
 
         return score;
+    }
+
+    private void GameOver() {
+        shouldPauseTime = true;
+        LoadScore();
+        int currScore = GetScore();
+        float currTimeUsed = timeLimit - currTimeRemaining;
+
+        //fill values
+        scoreText.text = $"Score: {currScore}";
+        CheckTimeSize(currTimeUsed);
+        string timeStr = $"{minutes} : {seconds}";
+        timeScoreText.text = timeStr;
+
+        if(loadedScore == -1 || loadedTime == Int32.MaxValue) {
+            highscoreText.text = "-";
+            minTimeScoreText.text = "-";
+        } else {
+            highscoreText.text = $"{loadedScore}";
+            CheckTimeSize(loadedTime);
+            timeStr = $"{minutes} : {seconds}";
+            minTimeScoreText.text = timeStr;
+        }
+        resultText.text = "Game Over!";
+        scoreCard.SetActive(true);
+
+        ballScript.CanBallMove(false);
     }
 
     private void SaveScore(int score, int time) {
@@ -221,10 +266,21 @@ public class ScoreSystem : MonoBehaviour
         catcherAdded = 0;
         scoreCard.SetActive(false);
         shouldPauseTime = false;
+        ballScript.CanBallMove(true);
 
         foreach(KeyValuePair<GameObject, Vector2> pair  in coinsMap) {            
             pair.Key.transform.position = pair.Value;
             pair.Key.SetActive(true);
         }
+
+        foreach(KeyValuePair<GameObject, Vector2> pair in weakPlatformMap) {
+            pair.Key.transform.position = pair.Value;
+            pair.Key.SetActive(true);
+        }
+
+        foreach(GameObject obj in catcherList) {
+            Destroy(obj);
+        }
+        catcherList.Clear();
     }
 }
