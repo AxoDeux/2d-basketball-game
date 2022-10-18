@@ -48,7 +48,7 @@ public class BallCatcher : MonoBehaviour, IDragHandler{
         if(!collision.CompareTag("Player")) { return; }
         if(isBallCaught) { return; }
         isBallCaught = true;
-
+        SoundManager.PlaySound(SoundManager.Sounds.BallCatch);
 
         BallMovement ball = collision.GetComponent<BallMovement>();
         ball.ResetPlayerMovement();

@@ -56,6 +56,7 @@ public class ScoreSystem : MonoBehaviour
     string seconds = string.Empty;
 
     private bool shouldPauseTime = false;
+    private bool didWarn = false;
 
     private int loadedScore = 0;
     private int loadedTime = 0;
@@ -96,6 +97,10 @@ public class ScoreSystem : MonoBehaviour
 
     private void Update() {
         if(shouldPauseTime) return;
+        if(currTimeRemaining < 30 && !didWarn) {                            //warning bell
+            SoundManager.PlaySound(SoundManager.Sounds.WarningBell);
+            didWarn = true;
+        }
         currTimeRemaining -= Time.deltaTime;
 
         CheckTimeSize(currTimeRemaining);
@@ -104,6 +109,7 @@ public class ScoreSystem : MonoBehaviour
         timeText.text = timeString;
 
         if(currTimeRemaining <= 0) {
+            SoundManager.PlaySound(SoundManager.Sounds.Buzzer);
             GameOver();
         }
     }
@@ -124,6 +130,7 @@ public class ScoreSystem : MonoBehaviour
     
     private void HandlePlayerDeath() {
         lives--;
+        SoundManager.PlaySound(SoundManager.Sounds.LifeLost);
         livesText.text = lives.ToString();
         if(lives == 0) GameOver();
     }
@@ -183,6 +190,7 @@ public class ScoreSystem : MonoBehaviour
         scoreCard.SetActive(true);
 
         ballScript.CanBallMove(false);
+        SoundManager.PlaySound(SoundManager.Sounds.LevelCompleted);
     }
 
 
@@ -228,6 +236,7 @@ public class ScoreSystem : MonoBehaviour
         scoreCard.SetActive(true);
 
         ballScript.CanBallMove(false);
+        SoundManager.PlaySound(SoundManager.Sounds.GameOver);
     }
 
     private void SaveScore(int score, int time) {

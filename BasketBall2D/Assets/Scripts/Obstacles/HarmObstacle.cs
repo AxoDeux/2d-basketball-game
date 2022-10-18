@@ -11,7 +11,7 @@ public class HarmObstacle : MonoBehaviour
         if(ball) {
             ball.PlayerDied();
         }
-
-        Debug.Log("Player destroyed");
+        SoundManager.PlaySound(SoundManager.Sounds.SpikeImpact);
+        
     }
 }

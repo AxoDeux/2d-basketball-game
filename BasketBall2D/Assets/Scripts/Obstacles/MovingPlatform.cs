@@ -21,4 +21,9 @@ public class MovingPlatform : MonoBehaviour
             LeanTween.moveLocalY(gameObject, range, tweenTime).setLoopPingPong();
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(!collision.gameObject.CompareTag("Player")) { return; }
+
+        SoundManager.PlaySound(SoundManager.Sounds.BallBounce);
+    }
 }

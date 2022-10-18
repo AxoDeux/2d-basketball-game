@@ -38,6 +38,7 @@ public class CoinMove : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Magnet")) {
+            SoundManager.PlaySound(SoundManager.Sounds.MagnetSuck);
             isCaughtInMagnet = true;
         }
 
@@ -45,6 +46,7 @@ public class CoinMove : MonoBehaviour
             isCaughtInMagnet = false;
             OnCoinCollectedEvent.Invoke();
             StartCoroutine(CoinCollectionDelay());
+            SoundManager.PlaySound(SoundManager.Sounds.CoinCollected);
         }
     }
 

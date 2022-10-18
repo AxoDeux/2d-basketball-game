@@ -19,7 +19,10 @@ public class LimitedBouncePlatform : MonoBehaviour
 
         bounceCount++;
         if(bounceCount >= bounceLimit) {
+            SoundManager.PlaySound(SoundManager.Sounds.BallBounceHard);
             gameObject.SetActive(false);
+        } else {
+            SoundManager.PlaySound(SoundManager.Sounds.BallBounce);
         }
     }
 }

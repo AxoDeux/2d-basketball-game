@@ -31,7 +31,6 @@ public class BallMovement : MonoBehaviour {
     private Camera mainCam;
     private AbilityBall ability;
 
-    private bool isClickOnUI = false;
     private bool isShot = false;                //Check is ball in air
     private bool checkingStuck = false;
     private bool canMove = true;
@@ -199,16 +198,15 @@ public class BallMovement : MonoBehaviour {
             if(!ability.isSecondLife) {
                 //Set Spawn Point
                 transform.position = spawnPoints[0].position;
-            }            
+            }
 
-            bounceAudio.Play();
+            SoundManager.PlaySound(SoundManager.Sounds.BallBounceHard);
 
             PlayerDied();
         }
 
-        if (otherTag == "Walls")
-        {
-            bounceAudio.Play();
+        if (otherTag == "Walls") {
+            SoundManager.PlaySound(SoundManager.Sounds.BallBounce);
         }
     }
 
@@ -235,7 +233,7 @@ public class BallMovement : MonoBehaviour {
         if(ability.isSecondLife) {
             transform.position = LastStationaryBallPos;
             ability.isSecondLife = false;
-            Debug.Log("Restarted from checkpoint");
+
         } else {
             LastStationaryBallPos = spawnPoints[0].position;
             transform.position = LastStationaryBallPos;
