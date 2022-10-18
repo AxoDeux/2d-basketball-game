@@ -108,8 +108,10 @@ public class GameEventsHandler : MonoBehaviour
                 forceField.SetActive(true);
                 int angle = Random.Range(0, 359);
                 forceField.GetComponent<AreaEffector2D>().forceAngle = angle;
-                Vector2 direction = new Vector2((float)Mathf.Cos(angle), (float)Mathf.Sin(angle));
+                float rad = (float)Mathf.Deg2Rad*angle;
+                Vector2 direction = new Vector2((float)Mathf.Cos(rad), (float)Mathf.Sin(rad));
                 SetForceField(direction);
+                Debug.Log(direction + " " + angle);
 
                 StartIndicator(EVENT_DURATION);
                 StartCoroutine(EventDurationDelay(Events.RandomForceField));
@@ -131,7 +133,7 @@ public class GameEventsHandler : MonoBehaviour
 
             case Events.RandomForceField:
                 forceField.SetActive(false);
-                SetForceField(new Vector2(0, 0));
+                SetForceField(new Vector2(0, -1));
                 break;
         }
 
@@ -162,10 +164,10 @@ public class GameEventsHandler : MonoBehaviour
 
     }
     private void SetForceField(Vector2 direction) {
+        direction *= 10;
         foreach(ParticleSystemForceField forceField in forceFields) {
-            direction = direction * 40;
             forceField.directionX = direction.x;
-            forceField.directionX = direction.y;
+            forceField.directionY = direction.y;
         }        
     }
 }
