@@ -15,7 +15,8 @@ public class ButtonManager : MonoBehaviour
     public delegate void RetryEventHandler();
     public static event RetryEventHandler RetryEvent;
 
-    private const float UNLOCK_TIME = 15f;
+    private const float UNLOCK_TIME = 5f;
+    private const float ABILITY_TIME = 15f;
     public delegate void UnlockCatcherEventHandler(bool unlockStatus);
     public static event UnlockCatcherEventHandler UnlockCatcherEvent;
     public bool isLocked = true;
@@ -46,7 +47,7 @@ public class ButtonManager : MonoBehaviour
             foreach(var pair in imageToFillMap) {
                 if(pair.Value < 0) continue;            //removed from map & deleted in coroutine
 
-                pair.Key.fillAmount = pair.Value - delta / UNLOCK_TIME;
+                pair.Key.fillAmount = pair.Value - delta / ABILITY_TIME;
                 imgs.Add(pair.Key);
                 fills.Add(pair.Key.fillAmount);
             }
@@ -105,7 +106,7 @@ public class ButtonManager : MonoBehaviour
     private IEnumerator DisableInteraction(Button button, GameObject mask) {
         button.interactable = false;
         buttons.Add(button);
-        yield return new WaitForSeconds(UNLOCK_TIME);
+        yield return new WaitForSeconds(ABILITY_TIME);
         button.interactable = true;
         buttons.Remove(button);
 

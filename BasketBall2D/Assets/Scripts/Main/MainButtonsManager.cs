@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainButtonsManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject H2P = null;
+
     private void Awake() {
         Screen.orientation = ScreenOrientation.Landscape;
     }
@@ -14,7 +17,11 @@ public class MainButtonsManager : MonoBehaviour
     }
 
     public void HowToPlay() {
-        //show instructions
+        H2P.SetActive(true);
+    }
+
+    public void CloseHowToPlay() {
+        H2P.SetActive(false);
     }
 
     public void Customize() {

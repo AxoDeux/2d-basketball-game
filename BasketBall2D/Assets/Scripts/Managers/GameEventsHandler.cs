@@ -6,6 +6,7 @@ using TMPro;
 
 public class GameEventsHandler : MonoBehaviour
 {
+    private const float EVENT_GAP = 20f;
     private const float EVENT_DURATION = 10f;
     private const float COUNTDOWN = 4f;
     private const string WALL_TAG = "Walls";
@@ -43,6 +44,8 @@ public class GameEventsHandler : MonoBehaviour
     private float countDown = 0;
     private bool isCountDown = false;
 
+    private float timer = EVENT_GAP;
+    private bool eventOngoing = false;
     public enum Events {
         InverseGravity,
         RandomForceField
@@ -73,6 +76,22 @@ public class GameEventsHandler : MonoBehaviour
                 eventNotice.gameObject.SetActive(false);
             } else {
                 eventNotice.text = "Event starts in.... " + num.ToString();
+            }
+        }
+
+        if(eventOngoing) return;            //add check for game started.
+
+        timer -= delta;
+        if(timer < 0) {
+            eventOngoing = true;
+            int randInt = Random.Range(0, 2);
+            switch(randInt) {
+                case 0:
+                    InvertGravity();
+                    break;
+                case 1:
+                    ActivateForceField();
+                    break;
             }
         }
 
@@ -137,6 +156,8 @@ public class GameEventsHandler : MonoBehaviour
                 break;
         }
 
+        eventOngoing = false;
+        timer = EVENT_GAP;
     }
 
     private void StartIndicator(float duration) {
@@ -162,6 +183,8 @@ public class GameEventsHandler : MonoBehaviour
         floor.tag = FLOOR_TAG;
         forceField.SetActive(false);
 
+        eventOngoing = false;
+        timer = EVENT_GAP;
     }
     private void SetForceField(Vector2 direction) {
         direction *= 10;
